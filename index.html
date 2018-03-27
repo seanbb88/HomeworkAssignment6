@@ -8,7 +8,11 @@
     <title>Gif Generator</title>
     <link rel="stylesheet" type="text/css" href="gif.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
+    <style>
+        .p-tag {
+            color: white;
+        }
+    </style>
 </head>
 
 <body>
@@ -53,7 +57,7 @@
             event.preventDefault();
             var button = $("#button-input").val().trim();
             buttonsDisplay.push(button);
-            
+
 
             renderButtons();
             displayGif();
@@ -76,20 +80,37 @@
                     .then(function (response) {
                         var results = response.data;
                         for (var i = 0; i < results.length; i++) {
-
-
-                            var responseDiv = $("<div>");
-
+                            var responseDiv = $("<div>")
                             var imageTag = $("<img>");
                             imageTag.attr("src", results[i].images.fixed_height.url);
-                            console.log(imageTag); 
+                            var ratingTag = $("<p>"); +
 
-                            $(responseDiv).append(imageTag);
+                                ratingTag.addClass("p-tag");
+                            (ratingTag).text("Rating: " + results[i].rating)
+
+                            $(responseDiv).append(imageTag, ratingTag);
 
                             $("#gif-zone").prepend(responseDiv);
                         }
+
+                        //STILL WORKING ON THE PAUSE FUNCTION 
+                        /*$(imageTag).on("click", function () {
+                           
+                            var state = $(this).attr("data-state");
+                            console.log(results);
+
+                            if (state === "still") {
+                                $(this).attr("src", $(this).attr(""));
+                                $(this).attr("data-state", "animate");
+                            } else {
+                                $(this).attr("src", $(this).attr(""));
+                                $(this).attr("", "");
+                            }
+                        });*/
                     })
-                
+
+
+
             })
 
 
@@ -97,10 +118,10 @@
 
         function clearGif() {
             $("#gif-zone").empty();
-            $("#button-input").empty(); 
+            $("#button-input").empty();
         }
 
-        
+
 
     </script>
 
