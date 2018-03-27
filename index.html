@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Gif Generator</title>
+    <link rel="stylesheet" type="text/css" href="gif.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+</head>
+
+<body>
+    <div class="header">
+        <h1>GIF Generator</h1>
+    </div>
+    <div id="buttons-view"></div>
+
+    <form id="gif-form">
+        <input type="text" id="button-input" placeholder="Type Here!">
+        <br>
+
+
+        <input id="add-button" type="submit" value="Add A Random Button!">
+        <input id="clear-gif" type="submit" value="Clear Out Buttons/Gifs">
+    </form>
+    </div>
+
+    <div id="button-zone" class="button-zone">
+    </div>
+
+    <div id="gif-zone" class="gif-zone">
+
+    </div>
+
+    <script type="text/javascript">
+        var buttonsDisplay = [];
+
+        function renderButtons() {
+            $("#button-zone").empty();
+
+            for (var i = 0; i < buttonsDisplay.length; i++) {
+                var a = $("<button>");
+                a.attr("data-name", buttonsDisplay[i]);
+                a.addClass("new-button");
+                a.text(buttonsDisplay[i]);
+                $("#button-zone").append(a);
+            }
+        }
+
+        $("#add-button").on("click", function (event) {
+            event.preventDefault();
+            var button = $("#button-input").val().trim();
+            buttonsDisplay.push(button);
+            
+
+            renderButtons();
+            displayGif();
+        })
+
+        $(document).on("click");
+        renderButtons();
+        displayGif();
+
+        function displayGif() {
+            $("button").on("click", function () {
+                var buttons = $(this).attr('data-name');
+                var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+                    buttons + "&api_key=dc6zaTOxFJmzC&limit=1";
+
+                $.ajax({
+                    url: queryURL,
+                    method: "GET"
+                })
+                    .then(function (response) {
+                        var results = response.data;
+                        for (var i = 0; i < results.length; i++) {
+
+
+                            var responseDiv = $("<div>");
+
+                            var imageTag = $("<img>");
+                            imageTag.attr("src", results[i].images.fixed_height.url);
+                            console.log(imageTag); 
+
+                            $(responseDiv).append(imageTag);
+
+                            $("#gif-zone").prepend(responseDiv);
+                        }
+                    })
+                
+            })
+
+
+        };
+
+        function clearGif() {
+            $("#gif-zone").empty();
+            $("#button-input").empty(); 
+        }
+
+        
+
+    </script>
+
+</body>
+
+</html>
